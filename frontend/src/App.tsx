@@ -11,9 +11,10 @@ function App() {
   };
 
   return (
-    <div className="flex flex-col items-center space-y-16">
-      <div>
-        <h1>Upload a video to turn it into a short:</h1>
+    <div className="flex flex-col items-center space-y-8">
+      <div className="space-y-2">
+        <h1 className="text-6xl">TikTokify!</h1>
+        <h2 className="text-3xl">Upload a video to turn it into a short</h2>
       </div>
       <div className="flex flex-col items-center space-y-4">
         <div>
