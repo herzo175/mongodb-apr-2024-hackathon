@@ -1,8 +1,15 @@
+import { useNavigate } from "react-router-dom";
 import "./App.css";
-import { Button } from "@/components/ui/button";
 import InputFile from "./components/inputs/InputFile";
+import { Button } from "./components/ui/button";
 
 function App() {
+  const navigate = useNavigate();
+
+  const uploadFile = () => {
+    navigate("/summary");
+  };
+
   return (
     <div className="flex flex-col items-center space-y-16">
       <div>
@@ -14,7 +21,7 @@ function App() {
         </div>
 
         <div>
-          <Button>Submit</Button>
+          <Button onClick={uploadFile}>Submit</Button>
         </div>
       </div>
     </div>
