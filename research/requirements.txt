@@ -1,0 +1,11 @@
+pillow==10.3.0
+transformers==4.39.3
+huggingface-hub==0.22.2
+torch==2.2.2
+torchvision==0.17.2
+nomic==3.0.21
+openai==1.16.2
+youtube-dl==2021.12.17
+pymongo[srv]==4.6.3
+sentencepiece==0.2.0
+protobuf==5.26.1
