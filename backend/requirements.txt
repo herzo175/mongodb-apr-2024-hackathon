@@ -1,12 +1,13 @@
 pika
 requests
-supabase==2.4.*
-ffmpeg-python==0.2.*
-openai==1.16.*
-chromadb==0.5.*
-transformers
-pillow
-torch
-numpy
-pydantic
+supabase
+ffmpeg-python
 pysrt
+pydantic
+# torch
+pillow
+# numpy
+openai
+chromadb
+transformers
+PyYAML==6.0.1
