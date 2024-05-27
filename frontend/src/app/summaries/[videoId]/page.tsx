@@ -1,9 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
+
 import { fetchJSON } from "~/app/clients/api";
 import { supabase } from "~/app/clients/supabase";
 import useSWR from "swr";
-import { GetSummary, UpdateStatusSchema } from "~/models/summaries";
+import { type GetSummary, UpdateStatusSchema } from "~/models/summaries";
 // import { useEffect, useState } from "react";
 
 interface VideoPageProps {
