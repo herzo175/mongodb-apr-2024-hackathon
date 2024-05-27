@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "next build",
+    "build": "SKIP_ENV_VALIDATION=true next build",
     "db:generate": "drizzle-kit generate:pg",
     "db:migrate": "dotenv -e .env -- tsx src/migrate.ts",
     "db:push": "drizzle-kit push:pg",
