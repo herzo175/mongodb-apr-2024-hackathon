@@ -6,7 +6,7 @@ openai==1.16.*
 chromadb==0.5.*
 transformers==4.40.*
 pillow==10.3.*
-torch==2.*
+torch
 numpy==1.26.*
 pydantic==2.4.*
 pysrt==1.1.*
