@@ -1,7 +1,7 @@
 "use client";
 
 import { fetchJSON } from "~/app/clients/api";
-import { supabase } from "~/app/clients/supabase";
+import { getBrowserClient } from "~/app/clients/supabase";
 import useSWR from "swr";
 import { type GetSummary, UpdateStatusSchema } from "~/models/summaries";
 // import { useEffect, useState } from "react";
@@ -18,7 +18,7 @@ const VideoPage = ({ params }: VideoPageProps) => {
     fetchJSON,
   );
 
-  const channel = supabase.channel(params.videoId);
+  const channel = getBrowserClient().channel(params.videoId);
 
   channel
     .on("broadcast", { event: "message" }, (payload) => {

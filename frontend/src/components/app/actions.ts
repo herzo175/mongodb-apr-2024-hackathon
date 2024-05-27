@@ -4,7 +4,7 @@ import { AMQPClient } from "@cloudamqp/amqp-client";
 import { env } from "~/env";
 import { db } from "~/server/db";
 import { summaries } from "~/server/db/schema";
-import { supabase } from "~/server/supabase";
+import { getServerSideClient } from "~/server/supabase";
 
 export const makeVideoUploadURL = async (): Promise<
   | {
@@ -22,8 +22,8 @@ export const makeVideoUploadURL = async (): Promise<
     return { error: "Failed to create summary", data: null };
   }
 
-  const { data, error } = await supabase.storage
-    .from("uploaded-videos")
+  const { data, error } = await getServerSideClient()
+    .storage.from("uploaded-videos")
     .createSignedUploadUrl(`${createdSummaries[0].id}.input.mp4`);
 
   if (error) {

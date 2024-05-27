@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { UpdateStatusSchema } from "~/models/summaries";
 import { db } from "~/server/db";
 import { summaries } from "~/server/db/schema";
-import { supabase } from "~/server/supabase";
+import { getServerSideClient } from "~/server/supabase";
 
 export const dynamic = "force-dynamic"; // defaults to auto
 
@@ -24,8 +24,8 @@ export const GET = async (
   let url: string | null = null;
 
   if ("FINISHED" == videoSummary.status) {
-    const { data, error } = await supabase.storage
-      .from("processed-videos")
+    const { data, error } = await getServerSideClient()
+      .storage.from("processed-videos")
       .createSignedUrl(`${params.videoId}.output.mp4`, 60);
 
     if (error) {
@@ -51,8 +51,6 @@ export const PUT = async (
 ) => {
   const { status } = UpdateStatusSchema.parse(await request.json());
 
-  console.log("status:", status);
-
   const updated = await db
     .update(summaries)
     .set({ status })
@@ -63,7 +61,7 @@ export const PUT = async (
     return Response.json({ error: "Failed to update status" }, { status: 500 });
   }
 
-  const channel = supabase.channel(params.videoId);
+  const channel = getServerSideClient().channel(params.videoId);
 
   await channel.send({
     type: "broadcast",

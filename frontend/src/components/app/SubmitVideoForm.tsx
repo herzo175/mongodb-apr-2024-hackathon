@@ -4,9 +4,9 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { makeVideoUploadURL, submitProcessingJob } from "./actions";
-import { supabase } from "~/app/clients/supabase";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { getBrowserClient } from "~/app/clients/supabase";
 
 const SubmitVideoForm = () => {
   const [videoFile, setVideoFile] = useState<File>();
@@ -49,8 +49,8 @@ const SubmitVideoForm = () => {
 
                 setButtonText("Uploading Video");
 
-                const { data: uploadData } = await supabase.storage
-                  .from("uploaded-videos")
+                const { data: uploadData } = await getBrowserClient()
+                  .storage.from("uploaded-videos")
                   .uploadToSignedUrl(data.path, data.token, videoFile);
 
                 if (!uploadData) {
