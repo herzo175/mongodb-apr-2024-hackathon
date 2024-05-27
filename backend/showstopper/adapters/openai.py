@@ -1,4 +1,6 @@
 from typing import List
+import os
+
 from transformers import (
     CLIPImageProcessor,
     CLIPVisionModelWithProjection,
@@ -15,18 +17,17 @@ from showstopper.images.ports import ImageEmbedder
 
 class CLIPImageTextEmbedder(ImageEmbedder):
     def __init__(self) -> None:
-        # TODO: figure out how to load models on instance
-        self.vision_processor = CLIPImageProcessor.from_pretrained(
-            "openai/clip-vit-base-patch32"
-        )
-        self.vision_model = CLIPVisionModelWithProjection.from_pretrained(
-            "openai/clip-vit-base-patch32"
+        # model_name = "openai/clip-vit-base-patch32"
+        model_name = os.path.join(
+            os.path.dirname(__file__), "../../clip-vit-base-patch32"
         )
 
-        self.tokenizer = CLIPTokenizer.from_pretrained("openai/clip-vit-base-patch32")
-        self.text_model = CLIPTextModelWithProjection.from_pretrained(
-            "openai/clip-vit-base-patch32"
-        )
+        # TODO: figure out how to load models on instance
+        self.vision_processor = CLIPImageProcessor.from_pretrained(model_name)
+        self.vision_model = CLIPVisionModelWithProjection.from_pretrained(model_name)
+
+        self.tokenizer = CLIPTokenizer.from_pretrained(model_name)
+        self.text_model = CLIPTextModelWithProjection.from_pretrained(model_name)
 
     def embed_images(self, images: List[str]) -> List[List[float]]:
         files = [Image.open(image) for image in images]
