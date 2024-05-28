@@ -1,7 +1,7 @@
-FROM python:3.10-alpine
+FROM python:3.10-slim-buster
 
-RUN apk update 
-RUN apk add python3-dev cmake gfortran gcc libc-dev g++
+RUN apt update
+RUN apt install -y python3-dev cmake gfortran gcc libc-dev g++
 
 WORKDIR /app
 
