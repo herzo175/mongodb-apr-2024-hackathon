@@ -7,7 +7,6 @@ WORKDIR /app
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt
-RUN pip install pysqlite3-binary
 
 COPY . .
 ENTRYPOINT [ "python", "main.py" ]
