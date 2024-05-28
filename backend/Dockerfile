@@ -1,4 +1,4 @@
-FROM python:3.10-slim-buster
+FROM python:3.10-slim-bookworm
 
 RUN apt update
 RUN apt install -y python3-dev cmake gfortran gcc libc-dev g++
@@ -7,7 +7,7 @@ WORKDIR /app
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt
-RUN pip freeze
+RUN pip install pysqlite3-binary
 
 COPY . .
 ENTRYPOINT [ "python", "main.py" ]
