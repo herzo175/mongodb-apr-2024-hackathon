@@ -13,5 +13,6 @@ class ImageEmbedder(ABC):
 
 
 class ImageCaptioner(ABC):
+    @abstractmethod
     def caption_image(self, image: str) -> str:
         raise NotImplementedError

@@ -17,9 +17,10 @@ from showstopper.images.ports import ImageEmbedder
 
 class CLIPImageTextEmbedder(ImageEmbedder):
     def __init__(self) -> None:
-        # model_name = "openai/clip-vit-base-patch32"
-        model_name = os.path.join(
-            os.path.dirname(__file__), "../../clip-vit-base-patch32"
+        model_path = "/models/clip-vit-base-patch32"
+
+        model_name = (
+            model_path if os.path.exists(model_path) else "openai/clip-vit-base-patch32"
         )
 
         # TODO: figure out how to load models on instance
