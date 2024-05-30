@@ -1,8 +1,7 @@
 FROM python:3.10-slim-bookworm
 
 RUN apt update
-RUN apt install -y python3-dev cmake gfortran gcc libc-dev g++ curl
-RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash apt install git-lfs
+RUN apt install -y python3-dev cmake gfortran gcc libc-dev g++ curl git-lfs
 RUN git lfs install
 
 WORKDIR /models
