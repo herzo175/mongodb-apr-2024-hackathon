@@ -13,7 +13,9 @@ export const env = createEnv({
       .default("development"),
     SUPABASE_URL: z.string(),
     SUPABASE_PRIVATE_KEY: z.string(),
-    QUEUE_URL: z.string(),
+    QUEUE_HOST: z.string(),
+    QUEUE_USER: z.string(),
+    QUEUE_PASS: z.string(),
   },
 
   /**
@@ -39,7 +41,9 @@ export const env = createEnv({
     SUPABASE_PRIVATE_KEY: process.env.SUPABASE_PRIVATE_KEY,
     NEXT_PUBLIC_SUPABASE_PUBLIC_KEY:
       process.env.NEXT_PUBLIC_SUPABASE_PUBLIC_KEY,
-    QUEUE_URL: process.env.QUEUE_URL,
+    QUEUE_HOST: process.env.QUEUE_HOST,
+    QUEUE_USER: process.env.QUEUE_USER,
+    QUEUE_PASS: process.env.QUEUE_PASS,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**

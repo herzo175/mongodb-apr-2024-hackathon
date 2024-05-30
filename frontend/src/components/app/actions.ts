@@ -43,7 +43,9 @@ export const makeVideoUploadURL = async (): Promise<
 };
 
 export const submitProcessingJob = async (videoId: string) => {
-  const amqp = new AMQPClient(env.QUEUE_URL);
+  const amqp = new AMQPClient(
+    `amqp://${env.QUEUE_USER}:${env.QUEUE_PASS}@${env.QUEUE_HOST}`,
+  );
   const conn = await amqp.connect();
   try {
     const ch = await conn.channel();
