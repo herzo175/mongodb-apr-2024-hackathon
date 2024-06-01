@@ -1,9 +1,10 @@
 "use server";
 
-import { AMQPClient } from "@cloudamqp/amqp-client";
-import { env } from "~/env";
+// import { AMQPClient } from "@cloudamqp/amqp-client";
+// import { env } from "~/env";
 import { db } from "~/server/db";
 import { summaries } from "~/server/db/schema";
+import { tasksQueuePub } from "~/server/rabbitmq";
 import { getServerSideClient } from "~/server/supabase";
 
 export const makeVideoUploadURL = async (): Promise<
@@ -43,22 +44,10 @@ export const makeVideoUploadURL = async (): Promise<
 };
 
 export const submitProcessingJob = async (videoId: string) => {
-  const amqp = new AMQPClient(
-    `amqp://${env.QUEUE_USER}:${env.QUEUE_PASS}@${env.QUEUE_HOST}`,
+  await tasksQueuePub.send(
+    "tasks",
+    JSON.stringify({
+      video_id: videoId,
+    }),
   );
-  const conn = await amqp.connect();
-  try {
-    const ch = await conn.channel();
-    const q = await ch.queue("tasks");
-    await q.publish(
-      JSON.stringify({
-        video_id: videoId,
-      }),
-      { deliveryMode: 2 },
-    );
-  } catch (e) {
-    console.error("error submitting job:", e);
-  } finally {
-    await conn.close();
-  }
 };

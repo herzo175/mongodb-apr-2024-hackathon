@@ -14,7 +14,6 @@
     "start": "next start"
   },
   "dependencies": {
-    "@cloudamqp/amqp-client": "^3.1.1",
     "@paralleldrive/cuid2": "^2.2.2",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-slot": "^1.0.2",
@@ -28,6 +27,7 @@
     "lucide-react": "^0.378.0",
     "next": "^14.2.1",
     "postgres": "^3.4.3",
+    "rabbitmq-client": "^4.6.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "swr": "^2.2.5",
