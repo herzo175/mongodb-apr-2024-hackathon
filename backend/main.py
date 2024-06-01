@@ -65,6 +65,7 @@ def process_video(video_id):
 
 def queue_processor():
     try:
+        print("creating connection...")
         connection = pika.BlockingConnection(
             pika.ConnectionParameters(
                 host=env.QUEUE_HOST,
@@ -74,11 +75,11 @@ def queue_processor():
             )
         )
 
+        print("creating channel...")
         channel = connection.channel()
-        print("created channel...")
 
+        print("declaring queue...")
         channel.queue_declare(queue="tasks", durable=True)
-        print("declared queue...")
 
         def callback(ch, method, properties, body: bytes):
             print(f" [x] Recieved {body}")
@@ -108,6 +109,7 @@ def queue_processor():
                     json={"status": "ERRORED"},
                 )
 
+        print("preparing consumer...")
         channel.basic_consume(
             queue="tasks", on_message_callback=callback, auto_ack=True
         )
