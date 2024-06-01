@@ -28,9 +28,6 @@ supabase: Client = create_client(
 upload_video_bucket = "uploaded-videos"
 processed_video_bucket = "processed-videos"
 
-# TODO: get from config
-backend_endpoint = "http://localhost:3000"
-
 
 def process_video(video_id):
     with tempfile.TemporaryDirectory() as tempdir:
@@ -76,9 +73,12 @@ def queue_processor():
                 ),
             )
         )
+
         channel = connection.channel()
+        print("created channel...")
 
         channel.queue_declare(queue="tasks", durable=True)
+        print("declared queue...")
 
         def callback(ch, method, properties, body: bytes):
             print(f" [x] Recieved {body}")
@@ -90,21 +90,21 @@ def queue_processor():
 
             try:
                 requests.put(
-                    f"{backend_endpoint}/api/summaries/{video_id}",
+                    f"{env.BACKEND_HOST}/api/summaries/{video_id}",
                     json={"status": "PROCESSING"},
                 )
 
                 process_video(video_id)
 
                 requests.put(
-                    f"{backend_endpoint}/api/summaries/{video_id}",
+                    f"{env.BACKEND_HOST}/api/summaries/{video_id}",
                     json={"status": "FINISHED"},
                 )
             except Exception as e:
                 print("Encountered error processing message:", e)
 
                 requests.put(
-                    f"{backend_endpoint}/api/summaries/{video_id}",
+                    f"{env.BACKEND_HOST}/api/summaries/{video_id}",
                     json={"status": "ERRORED"},
                 )
 
