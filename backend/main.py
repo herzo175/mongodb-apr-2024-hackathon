@@ -17,6 +17,8 @@ from dotenv import load_dotenv
 load_dotenv(".env")
 from showstopper.config import env
 
+print("creating clients...")
+
 video_splitter = video_splicer = FFMpegAdapter()
 image_embedder = CLIPImageTextEmbedder()
 audio_transcriber = text_generator = OpenAIAdapter(open_ai_key=env.OPENAI_API_KEY)
@@ -128,4 +130,5 @@ if __name__ == "__main__":
     # video_id = "messi-demo"
 
     # process_video(video_id)
+    print("starting queue processor...")
     queue_processor()
