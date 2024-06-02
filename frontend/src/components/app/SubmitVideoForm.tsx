@@ -15,6 +15,40 @@ const SubmitVideoForm = () => {
 
   const router = useRouter();
 
+  const handleSubmitVideo = async () => {
+    if (!videoFile) {
+      return;
+    }
+
+    setShowSpinner(true);
+
+    const { id, path, token } = await makeVideoUploadURL();
+
+    if (!id) {
+      console.error("error submitting video");
+      setShowSpinner(false);
+      return;
+    }
+
+    setButtonText("Uploading Video");
+
+    const { data: uploadData } = await getBrowserClient()
+      .storage.from("uploaded-videos")
+      .uploadToSignedUrl(path, token, videoFile);
+
+    if (!uploadData) {
+      setButtonText("Upload Failed!");
+      setShowSpinner(false);
+      return;
+    }
+
+    await submitProcessingJob(id);
+
+    setButtonText("Processing Video");
+    setShowSpinner(false);
+    router.push(`/summaries/${id}`);
+  };
+
   return (
     <div className="w-1/2 flex-col space-y-4 pt-8">
       <div className="w-full">
@@ -31,42 +65,7 @@ const SubmitVideoForm = () => {
 
       {videoFile && (
         <div className="flex w-full">
-          <Button
-            className="w-full"
-            size={"lg"}
-            onClick={async () => {
-              if (videoFile) {
-                setShowSpinner(true);
-
-                const { error: makeURLError, data } =
-                  await makeVideoUploadURL();
-
-                if (!data || makeURLError) {
-                  console.error("error submitting video:", makeURLError);
-                  setShowSpinner(false);
-                  return;
-                }
-
-                setButtonText("Uploading Video");
-
-                const { data: uploadData } = await getBrowserClient()
-                  .storage.from("uploaded-videos")
-                  .uploadToSignedUrl(data.path, data.token, videoFile);
-
-                if (!uploadData) {
-                  setButtonText("Upload Failed!");
-                  setShowSpinner(false);
-                  return;
-                }
-
-                setButtonText("Processing Video");
-                setShowSpinner(false);
-
-                await submitProcessingJob(data.id);
-                router.push(`/summaries/${data.id}`);
-              }
-            }}
-          >
+          <Button className="w-full" size={"lg"} onClick={handleSubmitVideo}>
             {showSpinner ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : (

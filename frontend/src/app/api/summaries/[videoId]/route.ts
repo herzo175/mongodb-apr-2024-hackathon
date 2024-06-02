@@ -1,7 +1,9 @@
 import { eq } from "drizzle-orm";
+import { NextRequest, NextResponse } from "next/server";
 import { UpdateStatusSchema } from "~/models/summaries";
 import { db } from "~/server/db";
 import { summaries } from "~/server/db/schema";
+import { tasksQueuePub } from "~/server/rabbitmq";
 import { getServerSideClient } from "~/server/supabase";
 
 export const dynamic = "force-dynamic"; // defaults to auto
@@ -10,7 +12,6 @@ export const GET = async (
   request: Request,
   { params }: { params: { videoId: string } },
 ) => {
-  console.log("params:", params);
   const videoSummaries = await db
     .select()
     .from(summaries)
@@ -43,6 +44,20 @@ export const GET = async (
     status: videoSummary.status,
     url,
   });
+};
+
+export const POST = async (
+  request: Request,
+  { params }: { params: { videoId: string } },
+) => {
+  await tasksQueuePub.send(
+    "tasks",
+    JSON.stringify({
+      video_id: params.videoId,
+    }),
+  );
+
+  return NextResponse.json({ submitted: true });
 };
 
 export const PUT = async (

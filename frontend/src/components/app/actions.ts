@@ -1,53 +1,17 @@
-"use server";
+import { CreateSummaryResponseSchema } from "~/models/summaries";
 
-// import { AMQPClient } from "@cloudamqp/amqp-client";
-// import { env } from "~/env";
-import { db } from "~/server/db";
-import { summaries } from "~/server/db/schema";
-import { tasksQueuePub } from "~/server/rabbitmq";
-import { getServerSideClient } from "~/server/supabase";
+export const makeVideoUploadURL = async () => {
+  const response = await fetch("/api/summaries", {
+    method: "POST",
+  });
 
-export const makeVideoUploadURL = async (): Promise<
-  | {
-      error: null;
-      data: { id: string; status: string | null; path: string; token: string };
-    }
-  | { error: string; data: null }
-> => {
-  const createdSummaries = await db
-    .insert(summaries)
-    .values({ status: "AWAITING_UPLOAD" })
-    .returning();
-
-  if (!createdSummaries[0]) {
-    return { error: "Failed to create summary", data: null };
-  }
-
-  const { data, error } = await getServerSideClient()
-    .storage.from("uploaded-videos")
-    .createSignedUploadUrl(`${createdSummaries[0].id}.input.mp4`);
-
-  if (error) {
-    console.error("Error uploading file:", error);
-    return { error: "Failed to upload file", data: null };
-  }
-
-  return {
-    error: null,
-    data: {
-      id: createdSummaries[0].id,
-      status: createdSummaries[0].status,
-      path: data.path,
-      token: data.token,
-    },
-  };
+  return CreateSummaryResponseSchema.parse(await response.json());
 };
 
 export const submitProcessingJob = async (videoId: string) => {
-  await tasksQueuePub.send(
-    "tasks",
-    JSON.stringify({
-      video_id: videoId,
-    }),
-  );
+  await fetch(`/api/summaries/${videoId}`, {
+    method: "POST",
+  });
+
+  return;
 };
